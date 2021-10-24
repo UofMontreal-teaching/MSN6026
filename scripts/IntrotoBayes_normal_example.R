@@ -1,12 +1,18 @@
-####################################
-#
-#  Estimation AM taille des américains
-#   
-#
-#####################################
+#' ---
+#' title: "IntrotoBayes_normal_example"
+#' author: "Jérôme Lavoué"
+#' date: "October 24, 2021"
+#' output: github_document
+#' ---
+#' 
+#' 
 
+#+ r setup, include=FALSE, cache = FALSE
+require("knitr")
+## setting working directory
+opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 
-#####librairies
+#+ libraries, include = FALSE
 
 library(ggplot2)
 library(ggthemes)
@@ -14,19 +20,16 @@ library(writexl)
 library(scales)
 
 
-######## prior
+#+ initial calculations , include = FALSE
 
 mu0 <- 175
 
 tau0 <- 1/5^2
 
 mydata <-data.frame(x=seq(150,200,length=500))
+
 mydata$y<- dnorm(mydata$x,mean=mu0,sd=1/sqrt(tau0))
 
-
-ICinf <- mu0+qnorm(0.025)*1/sqrt(tau0) 
-
-ICisup <- mu0+qnorm(0.975)*1/sqrt(tau0) 
 
 ####### false likelihood
 
@@ -38,50 +41,93 @@ n <- 5
 
 tau <- n * (1/sd^2) 
 
-
 mydata$y2 <- dnorm(mydata$x,mean=mu,sd=1/sqrt(tau))
 
 ###### posterior
 
-
 mydata$y3 <- dnorm(mydata$x, mean= (tau0*mu0 + n*tau*mu)/(tau0+n*tau),sd=1/sqrt(tau0+n*tau))
 
 
-ggplot(data=mydata, aes(x=x))+  
-  geom_line(aes(y=y),colour='black',size=1.5)+
-  
-  #ylim(0,0.008)+
-  xlab('Height (cm)')+
-  ylab('Density')+
-  theme(legend.position = "none") +
-  theme(aspect.ratio = 2/(1+sqrt(5)))	+
-  theme(axis.title.x=element_text(vjust=0,size=16))+
-  theme(axis.title.y=element_text(size=16,angle=90))+
-  theme(axis.text.x=element_text(size=14))+
-  theme(axis.text.y=element_text(size=10,angle=90))
+#' A look at the prior - figure 1
 
-ggplot(data=mydata, aes(x=x))+  
-  geom_line(aes(y=y2),colour='black',size=1.5)+
-  
-  #ylim(0,0.008)+
-  xlab('Height (cm)')+
-  ylab('Density')+
-  theme(legend.position = "none") +
-  theme(aspect.ratio = 2/(1+sqrt(5)))	+
-  theme(axis.title.x=element_text(vjust=0,size=16))+
-  theme(axis.title.y=element_text(size=16,angle=90))+
-  theme(axis.text.x=element_text(size=14))+
-  theme(axis.text.y=element_text(size=10,angle=90))
+#+ prior graph , echo = FALSE
 
-ggplot(data=mydata, aes(x=x))+  
-  geom_line(aes(y=y3),colour='black',size=1.5)+
+p <- ggplot(data=mydata, aes(x=x))+ geom_line(aes(y=y),colour='black',size=1.5)
   
-  #ylim(0,0.008)+
-  xlab('Height (cm)')+
-  ylab('Density')+
-  theme(legend.position = "none") +
-  theme(aspect.ratio = 2/(1+sqrt(5)))	+
-  theme(axis.title.x=element_text(vjust=0,size=16))+
-  theme(axis.title.y=element_text(size=16,angle=90))+
-  theme(axis.text.x=element_text(size=14))+
-  theme(axis.text.y=element_text(size=10,angle=90))
+p <- p + theme_solarized()
+
+p <- p +  xlab('Taille (cm)')+
+  ylab('Densité')+
+  theme(axis.title.x=element_text(size=14))+
+  theme(axis.title.y=element_text(size=14))+
+  theme(axis.text.x=element_text(size=12 , hjust = 0.5))+
+  theme(axis.text.y=element_text(size=12 ,  hjust = 0.5))
+
+p <- p + scale_y_continuous(expand = c(0 , 0.01) , 
+                            limits = c(0,0.12),
+                            labels = scales::number_format(accuracy = 0.01,
+                                                           decimal.mark = ',') )
+
+p  
+
+
+#' A look at the likelihood - figure 2
+
+#+ likelihood graph , echo = FALSE
+
+p <- ggplot(data=mydata, aes(x=x))+ geom_line(aes(y=y2),colour='black',size=1.5)
+
+p <- p + theme_solarized()
+
+p <- p +  xlab('Taille (cm)')+
+  ylab('Densité')+
+  theme(axis.title.x=element_text(size=14))+
+  theme(axis.title.y=element_text(size=14))+
+  theme(axis.text.x=element_text(size=12 , hjust = 0.5))+
+  theme(axis.text.y=element_text(size=12 ,  hjust = 0.5))
+
+p <- p + scale_y_continuous(expand = c(0 , 0.01) , 
+                            limits = c(0,0.12),
+                            labels = scales::number_format(accuracy = 0.01,
+                                                           decimal.mark = ',') )
+
+p <- p + scale_x_continuous(limits = c(150,200),
+                            labels = scales::number_format(accuracy = 0.01,
+                                                           decimal.mark = ',') )
+
+p  
+
+#' Distribution postérieure simulée par échantillonnage (n=1000)
+
+#+ posterior simulation , echo = FALSE , message = FALSE , warning = FALSE
+
+mysample <- data.frame( x = rnorm( 1000 , mean= (tau0*mu0 + n*tau*mu)/(tau0+n*tau),sd=1/sqrt(tau0+n*tau)))
+
+p <- ggplot(data=mydata, aes(x=x))+ geom_line(aes(y=y),colour='black',size=1.0)
+
+p <- p + geom_line( aes(y=y2),colour='blue',size=1.0)
+
+p <- p + geom_histogram( data= mysample ,aes(x=x,y=..density..),size=1.0, alpha = 0.5 , bins=50 )
+
+p <- p + theme_solarized()
+
+p <- p +  xlab('Taille (cm)')+
+  ylab('Densité')+
+  theme(axis.title.x=element_text(size=14))+
+  theme(axis.title.y=element_text(size=14))+
+  theme(axis.text.x=element_text(size=12 , hjust = 0.5))+
+  theme(axis.text.y=element_text(size=12 ,  hjust = 0.5))
+
+p <- p + scale_y_continuous(expand = c(0 , 0.01) , 
+                            limits = c(0,0.30),
+                            labels = scales::number_format(accuracy = 0.01,
+                                                           decimal.mark = ',') )
+
+p <- p + scale_x_continuous(limits = c(150,200),
+                            labels = scales::number_format(accuracy = 0.01,
+                                                           decimal.mark = ',') )
+
+p
+
+
+#write_xlsx( mysample , "data/myposteriorsample.xlsx" )
