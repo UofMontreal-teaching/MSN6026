@@ -25,7 +25,7 @@ library(ggthemes)
 #+ binomial1 , echo  = FALSE
 
     
-    myseq <- c( 0.1 , 0.2 , 0.34 , 0.5 , 0.6 , 0.8) 
+    myseq <- c( 0.1 , 0.2 , 0.30 , 0.5 , 0.6 , 0.8) 
     
     mydata <- data.frame( x = myseq , y =  dbinom( x = 14 , size = 41 , prob = myseq ) )
     
