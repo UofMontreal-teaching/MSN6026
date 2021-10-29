@@ -14,3 +14,12 @@ A look at the likelihood - figure 2
 Distribution postérieure simulée par échantillonnage (n=1000)
 
 ![](IntrotoBayes_normal_example_files/figure-gfm/posterior%20simulation%20-1.png)<!-- -->
+
+Distribution postérieure théorique
+
+![](IntrotoBayes_normal_example_files/figure-gfm/posterior%20theo%20-1.png)<!-- -->
+
+Distribution postérieure simulée par échantillonnage (n=1000)
+(uniquement la postérieure)
+
+![](IntrotoBayes_normal_example_files/figure-gfm/posterior%20simulation2%20-1.png)<!-- -->
