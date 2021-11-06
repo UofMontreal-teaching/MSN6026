@@ -23,3 +23,24 @@ Distribution postérieure simulée par échantillonnage (n=1000)
 (uniquement la postérieure)
 
 ![](IntrotoBayes_normal_example_files/figure-gfm/posterior%20simulation2%20-1.png)<!-- -->
+
+*Figures en anglais*
+
+![](IntrotoBayes_normal_example_files/figure-gfm/prior%20graph%20EN%20-1.png)<!-- -->
+
+A look at the likelihood - figure 2
+
+![](IntrotoBayes_normal_example_files/figure-gfm/likelihood%20graph%20EN-1.png)<!-- -->
+
+Distribution postérieure simulée par échantillonnage (n=1000)
+
+![](IntrotoBayes_normal_example_files/figure-gfm/posterior%20simulation%20EN-1.png)<!-- -->
+
+Distribution postérieure théorique
+
+![](IntrotoBayes_normal_example_files/figure-gfm/posterior%20theo%20EN%20-1.png)<!-- -->
+
+Distribution postérieure simulée par échantillonnage (n=1000)
+(uniquement la postérieure)
+
+![](IntrotoBayes_normal_example_files/figure-gfm/posterior%20simulation2%20EN%20-1.png)<!-- -->
