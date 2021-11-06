@@ -52,11 +52,11 @@ mydata$y3 <- dnorm(mydata$x, mean= (tau0*mu0 + n*tau*mu)/(tau0+n*tau),sd=1/sqrt(
 
 #+ prior graph , echo = FALSE
 
-p <- ggplot(data=mydata, aes(x=x))+ geom_line(aes(y=y),colour='black',size=1.5)
+p <- ggplot(data=mydata, aes(x=x))+ geom_line(aes(y=y),colour='red',size=1.5)
   
 p <- p + theme_solarized()
 
-p <- p +  xlab('Taille (cm)')+
+p <- p +  xlab('Univers des hypothèse pour la taille moyenne (cm)')+
   ylab('Densité')+
   theme(axis.title.x=element_text(size=14))+
   theme(axis.title.y=element_text(size=14))+
@@ -79,7 +79,7 @@ p <- ggplot(data=mydata, aes(x=x))+ geom_line(aes(y=y2),colour='black',size=1.5)
 
 p <- p + theme_solarized()
 
-p <- p +  xlab('Taille (cm)')+
+p <- p +  xlab('Univers des hypothèse pour la taille moyenne (cm)')+
   ylab('Densité')+
   theme(axis.title.x=element_text(size=14))+
   theme(axis.title.y=element_text(size=14))+
@@ -105,9 +105,9 @@ mysample <- data.frame( x = rnorm( 1000 , mean= (tau0*mu0 + n*tau*mu)/(tau0+n*ta
 
 p <- ggplot(data=mydata, aes(x=x))+ geom_line(aes(y=y),colour='red',size=1.0)
 
-p <- p + geom_line( aes(y=y2),colour='green',size=1.0)
+p <- p + geom_line( aes(y=y2),colour='black',size=1.0)
 
-p <- p + geom_histogram( data= mysample ,aes(x=x,y=..density..),size=1.0, alpha = 0.5 , bins=50 )
+p <- p + geom_histogram( data= mysample ,aes(x=x,y=..density..),size=1.0, alpha = 0.5 , bins=50 , fill = "green" )
 
 p <- p + theme_solarized()
 
@@ -140,9 +140,9 @@ p
 
 p <- ggplot(data=mydata, aes(x=x))+ geom_line(aes(y=y),colour='red',size=1.0)
 
-p <- p + geom_line( aes(y=y2),colour='green',size=1.0)
+p <- p + geom_line( aes(y=y2),colour='black',size=1.0)
 
-p <- p + geom_line( aes(y=y3),colour='black',size=1.0 )
+p <- p + geom_line( aes(y=y3),colour='green',size=1.0 )
 
 p <- p + theme_solarized()
 
