@@ -25,6 +25,7 @@ library(scales)
 muH1.1 <- 100
 
 sigmaH1.1 <- 5
+sigmaH1.2 <- 2
 
 muH0 <- 93
 
@@ -34,7 +35,7 @@ alpha <- 0.05
 
 n <- 5
 
-n.sim <-5000
+n.sim <-10000
 
 #+ rejection region , include = FALSE , echo = FALSE
 
@@ -62,17 +63,24 @@ ggplot(data=mydata, aes(x=x))+
 
 #+ power main example , include = FALSE , echo = FALSE
 
-mysample <- rnorm( n.sim*n , mean= muH1.1 , sd=sigmaH1.1 )
+mysample1.1 <- rnorm( n.sim*n , mean= muH1.1 , sd=sigmaH1.1 )
 
-mysample <- matrix(mysample, nrow = n.sim , ncol = n)
+mysample1.1 <- matrix(mysample1.1, nrow = n.sim , ncol = n)
 
-my.st1.1 <- apply( mysample , 1 , function(x) { (mean(x) - muH0)/(sigmaH1.1/sqrt(n))})
-my.st1.2 <- apply( mysample , 1 , function(x) { (mean(x) - muH0)/(sigmaH1.1/sqrt(n))})
+mysample1.2 <- rnorm( n.sim*n , mean= muH1.1 , sd=sigmaH1.2 )
+
+mysample1.2 <- matrix(mysample1.2, nrow = n.sim , ncol = n)
+
+
+
+my.st1.1 <- apply( mysample1.1 , 1 , function(x) { (mean(x) - muH0)/(sigmaH1.1/sqrt(n))})
+my.st1.2 <- apply( mysample1.2 , 1 , function(x) { (mean(x) - muH0)/(sigmaH1.2/sqrt(n))})
 my.st1.3 <- apply( mysample , 1 , function(x) { (mean(x) - muH0)/(sigmaH1.1/sqrt(n))})
 my.st1.4 <- apply( mysample , 1 , function(x) { (mean(x) - muH0)/(sigmaH1.1/sqrt(n))})
 
 
-my.emp.st <- data.frame(x=my.st)
+my.emp.st <- data.frame(x1.1=my.st1.1)
+my.emp.st$x1.2 <-my.st1.2
 
 mydata <-data.frame(x=seq(-3.5,10,length=5000))
 mydata$st.theo<- dt( mydata$x - (muH1.1-muH0)/(sigmaH1.1/sqrt(n))  , (n-1) )
@@ -83,8 +91,9 @@ p <- ggplot(data=mydata, aes(x=x))+ geom_line(aes(y=st.theo),colour='black',size
 #critical value
 p <- p +  geom_segment(aes(x = qt( (1-alpha) ,(n-1) ), y = 0, xend = qt( (1-alpha) ,(n-1) ), yend = dt( qt(  1-alpha , (n-1) )- (muH1.1-muH0)/(sigmaH1.1/sqrt(n)) ,(n-1))),size=1)                                                        
 #empirical st
-p <- p + geom_density( data= my.emp.st ,aes(x=x,y=..density..),size=1.0,  color = "green" )
+p <- p + geom_density( data= my.emp.st ,aes(x=x1.1,y=..density..),size=1.0,  color = "green" )
 
+p <- p + geom_density( data= my.emp.st ,aes(x=x1.2,y=..density..),size=1.0,  color = "darkgreen" )
 
 ### TO BE CONTINUED
 
